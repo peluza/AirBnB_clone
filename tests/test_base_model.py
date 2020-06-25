@@ -25,7 +25,7 @@ class TestBase(unittest.TestCase):
         test_1 = BaseModel()
         test_date_1 = test_1.created_at
         test_2 = datetime.today()
-        self.assertEquals(test_2.replace(microsecond=0),
+        self.assertEqual(test_2.replace(microsecond=0),
                           test_date_1.replace(microsecond=0))
 
     def test_2_date_id(self):
@@ -37,7 +37,15 @@ class TestBase(unittest.TestCase):
 
     def test_3_date_save(self):
         test_1 = BaseModel()
-        test_date_1 = test_1.save()
-        test_2 = datetime.today()
-        self.assertEquals(test_2.replace(microsecond=0),
-                          test_date_1.replace(microsecond=0))
+        test_date_1 = test_1.updated_at
+        time.sleep(1)
+        test_1.save()
+        test_date_2 = test_1.updated_at
+        self.assertNotEqual(test_date_1, test_date_2)
+
+    def test_4_dict(self):
+        test_1 = BaseModel()
+        dic = test_1.to_dict()
+        self.assertEqual(
+            dic,
+            {'created_at': test_1.created_at, 'updated_at': test_1.updated_at, 'id': test_1.id, '__class__': test_1.__class__.__name__})
