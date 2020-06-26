@@ -18,7 +18,7 @@ class FileStorage:
 
     def save(self):
         filename = FileStorage.__file_path
-        with open(filename, mode="w", encoding="utf-8") as my_file:
+        with open(filename, mode="a", encoding="utf-8") as my_file:
             dict_storage_obj = {
                    key: value.to_dict()
                 for (key,value) in FileStorage.__objects.items()
@@ -28,7 +28,10 @@ class FileStorage:
     def reload(self):
         filename = FileStorage.__file_path
         try:
-            with open(filename, mode="r", encoding="utf-8") as my_file:
-                FileStorage.__objects = json.load(my_file)
+          with open(FileStorage.__file_path, encoding='utf-8') as my_file:
+                str_read = my_file.read()
+                my_obj = json.loads(str_read)
+                for k, v in my_obj.items():
+                    FileStorage.__objects[k] = k.split('.')[0](1)
         except:
             pass
