@@ -27,8 +27,8 @@ class FileStorage:
 
     def reload(self):
         if os.path.exists(self.__file_path):
-            with open(self.__file_path, 'r', encoding='utf-8') as my_f:
-                str_read = my_f.read()
+            with open(self.__file_path, 'r', encoding='utf-8') as my_file:
+                str_read = my_file.read()
             my_obj = json.loads(str_read)
             for k, v in my_obj.items():
                 # self.__objects[k] = globals()[k.split('.')[0]](**v)
