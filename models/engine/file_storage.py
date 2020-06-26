@@ -6,6 +6,7 @@ import json
 import os
 from ..base_model import BaseModel
 
+
 class FileStorage:
     __file_path = "file.json"
     __objects = {}
@@ -30,4 +31,5 @@ class FileStorage:
                 str_read = my_f.read()
             my_obj = json.loads(str_read)
             for k, v in my_obj.items():
-                self.__objects[k] = globals()[k.split('.')[0]](**v)
+                # self.__objects[k] = globals()[k.split('.')[0]](**v)
+                self.__objects[k] = BaseModel(**v)
