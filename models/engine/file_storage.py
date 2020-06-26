@@ -2,36 +2,33 @@
 """
     module: file_storage
 """
-import json, os
-
+import json
+import os
+from ..base_model import BaseModel
 
 class FileStorage:
     __file_path = "file.json"
     __objects = {}
 
     def all(self):
-        return FileStorage.__objects
+        return self.__objects
 
     def new(self, obj):
         key = obj.__class__.__name__ + "." + obj.id
-        FileStorage.__objects[key] = obj
+        self.__objects[key] = obj
 
     def save(self):
-        filename = FileStorage.__file_path
-        with open(filename, mode="a", encoding="utf-8") as my_file:
-            dict_storage_obj = {
-                   key: value.to_dict()
-                for (key,value) in FileStorage.__objects.items()
-            }
-            json.dump(dict_storage_obj, my_file)
+        mydict = {}
+        for k, v in self.__objects.items():
+            mydict[k] = v.to_dict()
+        with open(self.__file_path, mode='w+') as my_file:
+            json.dump(mydict, my_file)
 
     def reload(self):
-        filename = FileStorage.__file_path
-        try:
-          with open(FileStorage.__file_path, encoding='utf-8') as my_file:
-                str_read = my_file.read()
-                my_obj = json.loads(str_read)
-                for k, v in my_obj.items():
-                    FileStorage.__objects[k] = k.split('.')[0](1)
-        except:
-            pass
+        if os.path.exists(self.__file_path):
+            with open(FileStorage.__file_path, 'r', encoding='utf-8') as my_f:
+                str_read = my_f.read()
+            my_obj = json.loads(str_read)
+            for k, v in my_obj.items():
+                FileStorage.__objects[k] = globals()[k.split('.')[0]](**v)
+            print("error")
