@@ -3,8 +3,16 @@
 
 import cmd
 from models.base_model import BaseModel
+from models import storage
+
 
 class HBNBCommand(cmd.Cmd):
+
+    prompt = "(hbnb)"
+
+    def do_prompt(self, line):
+        "Change the interactive prompt"
+        self.prompt = line + ' '
 
     def do_quit(self, line):
         return True
@@ -16,10 +24,37 @@ class HBNBCommand(cmd.Cmd):
     def help_quit(self):
         print("Quit command to exit the program\n")
 
-    def create(self, line):
-        line = BaseModel()
-        print(line.id)
+    def do_create(self, the_class):
+        if (len(the_class) == 0):
+            print("** class name missing **")
+        else:
+            if (the_class not in globals().keys()):
+                print("** class doesn't exist **")
+            else:
+                line = globals()[the_class]()
+                line.save()
+                print(line.id)
 
+    def do_show(self, the_class):
+        flag = 1
+        if (len(the_class) == 0):
+            print("** class name missing **")
+        try:
+            the_class_N, the_id = the_class.split(" ")
+            if (the_class_N not in globals().keys()):
+                print("** class doesn't exist **")
+            else:
+                all_objs = storage.all()
+                for key, value in all_objs.items():
+                    class_id = all_objs[key]
+                    object_id = key.split(".")[1]
+                    if (the_id == object_id):
+                        print(value)
+                        flag = 0
+                if flag:
+                    print("** no instance found *")
+        except:
+            print("** instance id missing **")
 
 
 if __name__ == '__main__':
