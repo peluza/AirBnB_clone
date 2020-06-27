@@ -6,7 +6,6 @@ from models.base_model import BaseModel
 from models import *
 
 
-
 class HBNBCommand(cmd.Cmd):
 
     prompt = "(hbnb) "
@@ -32,9 +31,9 @@ class HBNBCommand(cmd.Cmd):
             if (the_class not in globals().keys()):
                 print("** class doesn't exist **")
             else:
-                line = globals()[the_class]()
-                line.save()
-                print(line.id)
+                new_instance = globals()[the_class]()
+                new_instance.save()
+                print(new_instance.id)
 
     def do_show(self, args):
         if not args:
@@ -68,26 +67,80 @@ class HBNBCommand(cmd.Cmd):
         try:
             the_class, the_id = args.split(" ")
             if (the_class not in globals().keys()):
-                print("** class doesn't exist --> **")
+                print("** class doesn't exist **")
             else:
                 flag = 1
-                new_objet = {}
                 all_objs = storage.all()
                 for key, value in all_objs.items():
                     class_id = all_objs[key]
                     object_id = key.split(".")[1]
-                    if (the_id != object_id):
-                        new_objet[key] = value
+                    if (the_id == object_id):
+                        del all_objs[key]
+                        storage.save()
                         flag = 0
-                storage.__objects = new_objet
-                # storage.save()
-                print("des ---",new_objet)
-                print("des --->", storage.__objects)
+                        break
                 if flag:
                     print("** no instance found *")
         except:
             if (args not in globals().keys()):
-                print("** --> class doesn't exist **")
+                print("** class doesn't exist **")
+            else:
+                print("** instance id missing **")
+
+    def do_update(self, args):
+        if not args:
+            print("** class name missing **")
+            return
+        list_args = args.split()
+        if (len(list_args) < 2):
+            if (list_args[0] not in globals().keys()):
+                print("** class doesn't exist **")
+            else:
+                print("** instance id missing **")
+        elif (len(list_args) == 2):
+            if (list_args[0] not in globals().keys()):
+                print("** class doesn't exist **")
+                return
+            all_objs = storage.all()
+            for key, value in all_objs.items():
+                class_id = all_objs[key]
+                object_id = key.split(".")[1]
+                if (the_id == object_id):
+                    flag = 0
+            if flag:
+                print("** no instance found *")
+            else:
+                print("** attribute name missing **")
+        elif (len(list_args) == 3):
+            if (list_args[0] not in globals().keys()):
+                print("** class doesn't exist **")
+                return
+            all_objs = storage.all()
+            for key, value in all_objs.items():
+                class_id = all_objs[key]
+                object_id = key.split(".")[1]
+                if (the_id == object_id):
+                    flag = 0
+            if flag:
+                print("** no instance found *")
+            elif list_args[2].isdigit
+            print("** value missing **")
+
+            elif (list_args == 2):
+                if (list_args[1] == )
+
+            else:
+                flag = 1
+                if (the_id == object_id):
+                    del all_objs[key]
+                    storage.save()
+                    flag = 0
+                    break
+                if flag:
+                    print("** no instance found *")
+        except:
+            if (args not in globals().keys()):
+                print("** class doesn't exist **")
             else:
                 print("** instance id missing **")
 

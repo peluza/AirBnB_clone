@@ -31,7 +31,7 @@ class BaseModel:
         models.storage.save()
 
     def to_dict(self):
-        dic = self.__dict__
+        dic = self.__dict__.copy()
         dic['updated_at'] = datetime.isoformat(self.updated_at)
         dic['created_at'] = datetime.isoformat(self.created_at)
         dic['__class__'] = self.__class__.__name__
