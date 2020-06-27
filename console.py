@@ -3,7 +3,8 @@
 
 import cmd
 from models.base_model import BaseModel
-from models import storage
+from models import *
+
 
 
 class HBNBCommand(cmd.Cmd):
@@ -36,7 +37,7 @@ class HBNBCommand(cmd.Cmd):
                 print(line.id)
 
     def do_show(self, args):
-        if args:
+        if not args:
             print("** class name missing **")
             return
         try:
@@ -59,6 +60,49 @@ class HBNBCommand(cmd.Cmd):
                 print("** class doesn't exist **")
             else:
                 print("** instance id missing **")
+
+    def do_destroy(self, args):
+        if not args:
+            print("** class name missing **")
+            return
+        try:
+            the_class, the_id = args.split(" ")
+            if (the_class not in globals().keys()):
+                print("** class doesn't exist --> **")
+            else:
+                flag = 1
+                new_objet = {}
+                all_objs = storage.all()
+                for key, value in all_objs.items():
+                    class_id = all_objs[key]
+                    object_id = key.split(".")[1]
+                    if (the_id != object_id):
+                        new_objet[key] = value
+                        flag = 0
+                storage.__objects = new_objet
+                # storage.save()
+                print("des ---",new_objet)
+                print("des --->", storage.__objects)
+                if flag:
+                    print("** no instance found *")
+        except:
+            if (args not in globals().keys()):
+                print("** --> class doesn't exist **")
+            else:
+                print("** instance id missing **")
+
+    def do_all(self, the_class):
+        if (len(the_class) == 0):
+            the_class = "BaseModel"
+        if (the_class not in globals().keys()):
+            print("** class doesn't exist **")
+            return
+        else:
+            lista = []
+            all_objs = storage.all()
+            for key, value in all_objs.items():
+                lista.append(value.__str__())
+            print(lista)
 
 
 if __name__ == '__main__':
