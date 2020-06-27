@@ -8,7 +8,7 @@ from models import storage
 
 class HBNBCommand(cmd.Cmd):
 
-    prompt = "(hbnb)"
+    prompt = "(hbnb) "
 
     def do_prompt(self, line):
         "Change the interactive prompt"
@@ -35,15 +35,16 @@ class HBNBCommand(cmd.Cmd):
                 line.save()
                 print(line.id)
 
-    def do_show(self, the_class):
-        flag = 1
-        if (len(the_class) == 0):
+    def do_show(self, args):
+        if args:
             print("** class name missing **")
+            return
         try:
-            the_class_N, the_id = the_class.split(" ")
-            if (the_class_N not in globals().keys()):
+            the_class, the_id = args.split(" ")
+            if (the_class not in globals().keys()):
                 print("** class doesn't exist **")
             else:
+                flag = 1
                 all_objs = storage.all()
                 for key, value in all_objs.items():
                     class_id = all_objs[key]
@@ -54,7 +55,10 @@ class HBNBCommand(cmd.Cmd):
                 if flag:
                     print("** no instance found *")
         except:
-            print("** instance id missing **")
+            if (args not in globals().keys()):
+                print("** class doesn't exist **")
+            else:
+                print("** instance id missing **")
 
 
 if __name__ == '__main__':
