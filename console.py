@@ -12,7 +12,6 @@ from models.review import Review
 from models.base_model import BaseModel
 import shlex
 
-
 class HBNBCommand(cmd.Cmd):
 
     prompt = "(hbnb) "
@@ -35,7 +34,8 @@ class HBNBCommand(cmd.Cmd):
         if not the_class:
             print("** class name missing **")
             return
-        if (the_class not in globals().keys()):
+        check_class = storage.find_class(the_class)
+        if (check_class is False):
             print("** class doesn't exist **")
         else:
             new_instance = globals()[the_class]()
@@ -48,7 +48,8 @@ class HBNBCommand(cmd.Cmd):
             print("** class name missing **")
             return
         list_args = args.split(" ")
-        if (list_args[0] not in globals().keys()):
+        check_class = storage.find_class(list_args[0])
+        if (check_class is False):
             print("** class doesn't exist **")
             return
         if (len(list_args) <= 1):
@@ -67,7 +68,8 @@ class HBNBCommand(cmd.Cmd):
             print("** class name missing **")
             return
         list_args = args.split(" ")
-        if (list_args[0] not in globals().keys()):
+        check_class = storage.find_class(list_args[0])
+        if (check_class is False):
             print("** class doesn't exist **")
             return
         if (len(list_args) <= 1):
@@ -79,7 +81,8 @@ class HBNBCommand(cmd.Cmd):
             print("** no instance found *")
             return
         del all_objs[classN_id]
-        storage.save()
+        new_instance = BaseModel()
+        new_instance.save()
         return
 
     def do_update(self, args):
@@ -88,7 +91,8 @@ class HBNBCommand(cmd.Cmd):
             return
         args = args.replace("'", "")
         list_args = shlex.split(args, posix=False)
-        if list_args[0] not in globals().keys():
+        check_class = storage.find_class(list_args[0])
+        if (check_class is False):
             print("** class doesn't exist **")
             return
         if len(list_args) <= 1:
@@ -110,20 +114,29 @@ class HBNBCommand(cmd.Cmd):
         value = list_args[3].strip('\"')
         setattr(old_dic, name, value)
         # old_dic.__dict__[name] = value
-        storage.save()
+        new_instance = BaseModel(**)
+        new_instance.save()
         return
 
     def do_all(self, the_class):
-        if (the_class and the_class not in globals().keys()):
-            print("** class doesn't exist **")
+        if the_class is "":
+            lista = []
+            all_objs = storage.all()
+            for key, value in all_objs.items():
+                lista.append(value.__str__())
+            print(lista)
             return
-        lista = []
-        all_objs = storage.all()
-        for key, value in all_objs.items():
-            lista.append(value.__str__())
-        print(lista)
+        check_class = storage.find_class(the_class)
+        if check_class is False:
+            print("** class doesn't exist **")
+        else:
+            lista = []
+            all_objs = storage.all()
+            for key, value in all_objs.items():
+                if key.split(".")[0] == the_class:
+                    lista.append(value.__str__())
+            print(lista)
         return
-
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
