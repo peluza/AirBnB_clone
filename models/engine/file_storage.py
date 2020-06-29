@@ -37,3 +37,11 @@ class FileStorage:
                 # self.__objects[k] = globals()[class_name](**v)
                 self.__objects[k] = globals()[k.split('.')[0]](**v)
                 # self.__objects[k] = BaseModel(**v)
+
+    def find_class(self, the_class):
+        list_class = ["BaseModel","User", "City", "Place", "Amenity", "Review","State"]
+        if the_class in list_class:
+            return True
+        else:
+            return False
+

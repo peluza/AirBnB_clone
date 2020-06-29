@@ -11,32 +11,44 @@ from models.place import Place
 from models.review import Review
 from models.base_model import BaseModel
 import shlex
+import re
 
 
 class HBNBCommand(cmd.Cmd):
 
-    prompt = "(hbnb) "
+    prompt = "#---> "
+    # prompt = "(hbnb) "
+
+    def emptyline(self):
+        pass
 
     def do_prompt(self, line):
         "Change the interactive prompt"
         self.prompt = line + ' '
 
     def do_quit(self, line):
+        "Quit command to exit the program"
         return True
 
     def do_EOF(self, line):
-        """ Quit command to exit the program """
+        """ Exit the program """
         return True
 
-    def help_quit(self):
-        print("Quit command to exit the program\n")
+    # def help_quit(self):
+    #     print("Quit command to exit the program\n")
+    def find_class(self, the_class):
+        list_class = ["BaseModel", "User", "City",
+                      "Place", "Amenity", "Review", "State"]
+        if the_class in list_class:
+            return True
+        return False
 
     def do_create(self, the_class):
         if not the_class:
             print("** class name missing **")
             return
-
-        if (the_class not in globals().keys()):
+        check_class = self.find_class(the_class)
+        if (check_class is False):
             print("** class doesn't exist **")
         else:
             new_instance = globals()[the_class]()
@@ -49,7 +61,8 @@ class HBNBCommand(cmd.Cmd):
             print("** class name missing **")
             return
         list_args = args.split(" ")
-        if (list_args[0] not in globals().keys()):
+        check_class = self.find_class(list_args[0])
+        if (check_class is False):
             print("** class doesn't exist **")
             return
         if (len(list_args) <= 1):
@@ -58,7 +71,7 @@ class HBNBCommand(cmd.Cmd):
         all_objs = storage.all()
         classN_id = list_args[0] + "." + list_args[1]
         if classN_id not in all_objs:
-            print("** no instance found *")
+            print("** no instance found **")
             return
         print(all_objs[classN_id])
         return
@@ -68,7 +81,8 @@ class HBNBCommand(cmd.Cmd):
             print("** class name missing **")
             return
         list_args = args.split(" ")
-        if (list_args[0] not in globals().keys()):
+        check_class = self.find_class(list_args[0])
+        if (check_class is False):
             print("** class doesn't exist **")
             return
         if (len(list_args) <= 1):
@@ -77,7 +91,7 @@ class HBNBCommand(cmd.Cmd):
         all_objs = storage.all()
         classN_id = list_args[0] + "." + list_args[1]
         if classN_id not in all_objs:
-            print("** no instance found *")
+            print("** no instance found **")
             return
         del all_objs[classN_id]
         storage.save()
@@ -88,8 +102,10 @@ class HBNBCommand(cmd.Cmd):
             print("** class name missing **")
             return
         args = args.replace("'", "")
+        print(args)
         list_args = shlex.split(args, posix=False)
-        if list_args[0] not in globals().keys():
+        check_class = self.find_class(list_args[0])
+        if (check_class is False):
             print("** class doesn't exist **")
             return
         if len(list_args) <= 1:
@@ -98,7 +114,7 @@ class HBNBCommand(cmd.Cmd):
         all_objs = storage.all()
         className_id = list_args[0] + "." + list_args[1]
         if className_id not in all_objs:
-            print("** no instance found *")
+            print("** no instance found **")
             return
         if len(list_args) <= 2:
             print("** attribute name missing **")
@@ -111,19 +127,62 @@ class HBNBCommand(cmd.Cmd):
         value = list_args[3].strip('\"')
         setattr(old_dic, name, value)
         # old_dic.__dict__[name] = value
-        BaseModel.save(self)
+        BaseModel.save(old_dic)
         return
 
     def do_all(self, the_class):
-        if (the_class and the_class not in globals().keys()):
-            print("** class doesn't exist **")
+        if the_class is "":
+            lista = []
+            all_objs = storage.all()
+            for key, value in all_objs.items():
+                lista.append(value.__str__())
+            print(lista)
             return
-        lista = []
+        check_class = self.find_class(the_class)
+        if check_class is False:
+            print("** class doesn't exist **")
+        else:
+            lista = []
+            all_objs = storage.all()
+            for key, value in all_objs.items():
+                if key.split(".")[0] == the_class:
+                    lista.append(value.__str__())
+            print(lista)
+        return
+
+    def count_class(self, the_class):
+        count = 0
         all_objs = storage.all()
-        print(all)
         for key, value in all_objs.items():
-            lista.append(value.__str__())
-        print(lista)
+            if key.split(".")[0] == the_class:
+                count += 1
+        return count
+
+    def default(self, args):
+        list_args = args.split(".")
+        check_class = self.find_class(list_args[0])
+        if len(list_args) > 1 and check_class:
+            if list_args[1] == "all()":
+                return self.do_all(list_args[0])
+            elif list_args[1] == "count()":
+                count = self.count_class(list_args[0])
+                print(count)
+                return
+            function = list_args[1].replace("(", " ").replace(")", " ").replace(",", "")
+            print(function)
+            func_args = shlex.split(function)
+
+            classN_id = list_args[0] + " " + func_args[1]
+            if func_args[0] == "show":
+                return self.do_show(classN_id)
+            elif func_args[0] == "destroy":
+                print("destroying ...")
+                return self.do_destroy(classN_id)
+            elif func_args[0] == "update":
+                classN_id_args = classN_id + " " + func_args[2] + " "+ func_args[3]
+                print("updating...")
+                return self.do_update(classN_id_args)
+        print("*** Unknown syntax: {}".format(args))
         return
 
 
