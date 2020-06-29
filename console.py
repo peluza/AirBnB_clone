@@ -2,10 +2,15 @@
 """ console"""
 
 import cmd
-from models.base_model import BaseModel
 from models import *
+from models.user import User
+from models.state import State
+from models.city import City
+from models.amenity import Amenity
+from models.place import Place
+from models.review import Review
+from models.base_model import BaseModel
 import shlex
-import re
 
 
 class HBNBCommand(cmd.Cmd):
@@ -27,69 +32,55 @@ class HBNBCommand(cmd.Cmd):
         print("Quit command to exit the program\n")
 
     def do_create(self, the_class):
-        if (len(the_class) == 0):
+        if not the_class:
             print("** class name missing **")
+            return
+        if (the_class not in globals().keys()):
+            print("** class doesn't exist **")
         else:
-            if (the_class not in globals().keys()):
-                print("** class doesn't exist **")
-                print(globals())
-            else:
-                new_instance = globals()[the_class]()
-                new_instance.save()
-                print(new_instance.id)
+            new_instance = globals()[the_class]()
+            new_instance.save()
+            print(new_instance.id)
+            return
 
     def do_show(self, args):
         if not args:
             print("** class name missing **")
             return
-        try:
-            the_class, the_id = args.split(" ")
-            if (the_class not in globals().keys()):
-                print("** class doesn't exist **")
-            else:
-                flag = 1
-                all_objs = storage.all()
-                for key, value in all_objs.items():
-                    class_id = all_objs[key]
-                    object_id = key.split(".")[1]
-                    if (the_id == object_id):
-                        print(value)
-                        flag = 0
-                if flag:
-                    print("** no instance found *")
-        except:
-            if (args not in globals().keys()):
-                print("** class doesn't exist **")
-            else:
-                print("** instance id missing **")
+        list_args = args.split(" ")
+        if (list_args[0] not in globals().keys()):
+            print("** class doesn't exist **")
+            return
+        if (len(list_args) <= 1):
+            print("** instance id missing **")
+            return
+        all_objs = storage.all()
+        classN_id = list_args[0] + "." + list_args[1]
+        if classN_id not in all_objs:
+            print("** no instance found *")
+            return
+        print(all_objs[classN_id])
+        return
 
     def do_destroy(self, args):
         if not args:
             print("** class name missing **")
             return
-        try:
-            the_class, the_id = args.split(" ")
-            if (the_class not in globals().keys()):
-                print("** class doesn't exist **")
-            else:
-                flag = 1
-                all_objs = storage.all()
-                for key, value in all_objs.items():
-                    print(key, value)
-                    class_id = all_objs[key]
-                    object_id = key.split(".")[1]
-                    if (the_id == object_id):
-                        del all_objs[key]
-                        storage.save()
-                        flag = 0
-                        break
-                if flag:
-                    print("** no instance found *")
-        except:
-            if (args not in globals().keys()):
-                print("** class doesn't exist **")
-            else:
-                print("** instance id missing **")
+        list_args = args.split(" ")
+        if (list_args[0] not in globals().keys()):
+            print("** class doesn't exist **")
+            return
+        if (len(list_args) <= 1):
+            print("** instance id missing **")
+            return
+        all_objs = storage.all()
+        classN_id = list_args[0] + "." + list_args[1]
+        if classN_id not in all_objs:
+            print("** no instance found *")
+            return
+        del all_objs[classN_id]
+        storage.save()
+        return
 
     def do_update(self, args):
         if not args:
@@ -120,19 +111,18 @@ class HBNBCommand(cmd.Cmd):
         setattr(old_dic, name, value)
         # old_dic.__dict__[name] = value
         storage.save()
+        return
 
     def do_all(self, the_class):
-        if (len(the_class) == 0):
-            the_class = "BaseModel"
-        if (the_class not in globals().keys()):
+        if (the_class and the_class not in globals().keys()):
             print("** class doesn't exist **")
             return
-        else:
-            lista = []
-            all_objs = storage.all()
-            for key, value in all_objs.items():
-                lista.append(value.__str__())
-            print(lista)
+        lista = []
+        all_objs = storage.all()
+        for key, value in all_objs.items():
+            lista.append(value.__str__())
+        print(lista)
+        return
 
 
 if __name__ == '__main__':
