@@ -27,7 +27,9 @@ class BaseModel:
             self.__class__.__name__, self.id, self.__dict__))
 
     def save(self):
+        print(self.updated_at)
         self.updated_at = datetime.today()
+        print("entra a save")
         models.storage.save()
 
     def to_dict(self):

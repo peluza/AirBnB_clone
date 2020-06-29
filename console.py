@@ -35,6 +35,7 @@ class HBNBCommand(cmd.Cmd):
         if not the_class:
             print("** class name missing **")
             return
+
         if (the_class not in globals().keys()):
             print("** class doesn't exist **")
         else:
@@ -110,7 +111,7 @@ class HBNBCommand(cmd.Cmd):
         value = list_args[3].strip('\"')
         setattr(old_dic, name, value)
         # old_dic.__dict__[name] = value
-        storage.save()
+        BaseModel.save(self)
         return
 
     def do_all(self, the_class):
@@ -119,6 +120,7 @@ class HBNBCommand(cmd.Cmd):
             return
         lista = []
         all_objs = storage.all()
+        print(all)
         for key, value in all_objs.items():
             lista.append(value.__str__())
         print(lista)

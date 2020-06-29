@@ -22,6 +22,7 @@ class FileStorage:
     def save(self):
         mydict = {}
         for k, v in self.__objects.items():
+            print(v)
             mydict[k] = v.to_dict()
         with open(self.__file_path, mode='w+') as my_file:
             json.dump(mydict, my_file)
@@ -32,7 +33,7 @@ class FileStorage:
                 str_read = my_file.read()
             my_obj = json.loads(str_read)
             for k, v in my_obj.items():
-                class_name = k.split('.')[0]
-                self.__objects[k] = globals()[class_name](**v)
-                # self.__objects[k] = globals()[k.split('.')[0]](**v)
+                # class_name = k.split('.')[0]
+                # self.__objects[k] = globals()[class_name](**v)
+                self.__objects[k] = globals()[k.split('.')[0]](**v)
                 # self.__objects[k] = BaseModel(**v)
