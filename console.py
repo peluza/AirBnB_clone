@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-""" console"""
+""" Module: console"""
 
 import cmd
 from models import *
@@ -15,12 +15,17 @@ import re
 
 
 class HBNBCommand(cmd.Cmd):
-    """ comment"""
+    """HBNBCommand
 
-    prompt = "#---> "
-    # prompt = "(hbnb) "
+    [Holberton BNB Console]
+        cmd (method): [command]
+
+    """
+
+    prompt = "(hbnb) "
 
     def emptyline(self):
+        """empty line when hitting ENTER"""
         pass
 
     def do_prompt(self, line):
@@ -35,10 +40,8 @@ class HBNBCommand(cmd.Cmd):
         """ Exit the program """
         return True
 
-    # def help_quit(self):
-    #     print("Quit command to exit the program\n")
     def find_class(self, the_class):
-        """commit find"""
+        """ Return True if the class is found in the list """
         list_class = ["BaseModel", "User", "City",
                       "Place", "Amenity", "Review", "State"]
         if the_class in list_class:
@@ -46,7 +49,9 @@ class HBNBCommand(cmd.Cmd):
         return False
 
     def do_create(self, the_class):
-        """create """
+        """Creates a new instance of the specific class
+saves the object (to the JSON file) and prints the id
+[Usage: create <class name> <id>]"""
         if not the_class:
             print("** class name missing **")
             return
@@ -60,11 +65,8 @@ class HBNBCommand(cmd.Cmd):
             return
 
     def do_show(self, args):
-        """show
-
-        Args:
-            args ([type]): [description]
-        """
+        """Print the string representation of the obj
+[Usage: show <class name> <id>]"""
         if not args:
             print("** class name missing **")
             return
@@ -85,11 +87,8 @@ class HBNBCommand(cmd.Cmd):
         return
 
     def do_destroy(self, args):
-        """destory
-
-        Args:
-            args ([type]): [description]
-        """
+        """Deletes an instance based on the class name and id
+[Usage: destroy <class name> <id>]"""
         if not args:
             print("** class name missing **")
             return
@@ -111,10 +110,8 @@ class HBNBCommand(cmd.Cmd):
         return
 
     def do_update(self, args):
-        """update
-
-        Args:
-            args ([type]): [description]
+        """ Updates an instance based on the class and id
+[Usage: <class name> <id>]
         """
         if not args:
             print("** class name missing **")
@@ -148,11 +145,10 @@ class HBNBCommand(cmd.Cmd):
         return
 
     def do_all(self, the_class):
-        """all
+        """Prints all string representation of all instances
+[Usage: *<>
+        *<class name>]"""
 
-        Args:
-            the_class ([type]): [description]
-        """
         if the_class is "":
             lista = []
             all_objs = storage.all()
@@ -173,14 +169,7 @@ class HBNBCommand(cmd.Cmd):
         return
 
     def count_class(self, the_class):
-        """count_class
-
-        Args:
-            the_class ([type]): [description]
-
-        Returns:
-            [type]: [description]
-        """
+        """Count the amount of objects of the specific class"""
         count = 0
         all_objs = storage.all()
         for key, value in all_objs.items():
@@ -189,19 +178,16 @@ class HBNBCommand(cmd.Cmd):
         return count
 
     def default(self, args):
-        """default
-
-        Args:
-            args ([type]): [description]
-
-        Returns:
-            [type]: [description]
-        """
+        """Use for reaching ohther function with different usage
+[Usage: *<class name>.all()
+        *<class name>.count()
+        *<class name>.show(<"id">)
+        *<class name>.update(<"id">, <attribute name>, <attribute value>)
+        *<class name>.update(<"id">, {<'attr_name':>, <"attr_value">})]"""
         do_braces_split = False
         list_args = args.split(".")
         check_class = self.find_class(list_args[0])
         if len(list_args) > 1 and check_class:
-            # fun = list_args[1].split("(")[0]
             if list_args[1] == "all()":
                 return self.do_all(list_args[0])
             elif list_args[1] == "count()":
@@ -210,71 +196,57 @@ class HBNBCommand(cmd.Cmd):
                 return
             function = list_args[1].replace(
                 "(", " ").replace(")", " ").replace(",", "")
-            print("func: ", function)
             func_args = shlex.split(function)
-            print("Antes del Update")
-            print(func_args)
             # concatenamos Class_name, espacio, id
             classN_id = list_args[0] + " " + func_args[1]
-
             if func_args[0] == "show":
                 return self.do_show(classN_id)
+
             elif func_args[0] == "destroy":
-                print("destroying ...")
                 return self.do_destroy(classN_id)
 
             if func_args[0] == "update":
                 if "{" in list_args[1] and "}" in list_args[1]:
-                    print("True have Braces")
                     do_braces_split = True
                 if do_braces_split is False:
-                    classN_id_args = classN_id + " " + \
-                        func_args[2] + " " + "\"" + func_args[3] + "\""
-                    print("updating...")
-                    return self.do_update(classN_id_args)
+                    if "{" not in list_args[1] and "}" not in list_args[1]:
+                        classN_id_args = classN_id + " " + \
+                            "\"" + func_args[2] + "\"" + " " + \
+                            "\"" + func_args[3] + "\""
+                        print(classN_id_args)
+                        return self.do_update(classN_id_args)
+
                 elif do_braces_split:
-                    update = list_args[1].replace(",", "").replace(":", "")
+                    try:
+                        func = list_args[1].split("(")[0]
+                        id_args = re.compile(
+                            "\(([^)]*)\)").split(list_args[1])[1]
+                        dic_args = re.compile("\{([^}]*)\}").split(id_args)[1]
+                        dic_ = "{" + dic_args + "}"
+                        try:
+                            s = eval(dic_)
+                            if (type(s) is dict):
+                                dic_ = dic_args.replace(
+                                    ":", "").replace(",", "")
+                                dic_args = shlex.split(dic_)
+                                quo = "\""
+                                es = " "
+                                j = 0
+                                for i in range(int(len(dic_args) / 2)):
+                                    inp = classN_id + " " + quo + \
+                                        dic_args[j] + quo + " " + \
+                                        quo + dic_args[j+1] + quo
+                                    j = j + 2
+                                    print(inp)
+                                    self.do_update(inp)
+                                return
+                        except:
+                            Exception("*** Unknown syntax: {}".format(args))
+                            return
+                    except:
+                        Exception("*** Unknown syntax: {}".format(args))
+                        return
 
-                    return
-                    print("Here")
-                    print("-----")
-                    print(list_args[1])
-                    # f[0]  es Update
-                    # f[1] es lo que esta entre el parentesis
-                    update = list_args[1].replace(",", "").replace(":", "")
-                    f = re.compile("\(([^)]*)\)").split(update)
-                    print("f>>", f)
-                    print(f[1])
-                    s = "".join(f[1])
-                    print("s>>", s)
-                    f2 = re.compile("\{([^}]*)\}").split(s)
-                    print("f2>>", f2[0])
-                    # f2[0] = es el id
-                    s = "".join(f2[1])
-                    print("s>>", s)
-                    f3 = shlex.split(s)
-                    # f3 son los argumentos del dictionario
-                    print(len(f3))
-                    print("f3>>", f3)
-                    f4 = f2[0].replace("\"", "")
-                    # f4 = es el id sin comillas
-                    print(f4)
-                    lista = list_args[0] + " " + f4 + " "
-                    j = 0
-                    inp = ""
-                    quot = "\""
-                    for i in range(int(len(f3) / 2)):
-                        # f3 [j] = Name
-                        # f3[j+1] = value
-                        inp = lista + quot + f3[j] + \
-                            quot + " " + quot + f3[j+1] + quot
-                        print(inp)
-                        print("i", i)
-                        self.do_update(inp)
-
-                        print("Updating...")
-                        j = j + 2
-                    return
             print("*** Unknown syntax: {}".format(args))
             return
 

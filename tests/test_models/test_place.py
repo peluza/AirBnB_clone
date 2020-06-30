@@ -7,6 +7,7 @@ import os
 from models.place import Place
 from models.base_model import BaseModel
 
+
 class TestBase(unittest.TestCase):
     """TextMaxInteger(unittest.TesCase)
 
@@ -17,6 +18,13 @@ class TestBase(unittest.TestCase):
     def test_pep8_conformance_base(self):
         pep8style = pep8.StyleGuide(quiet=True)
         result = pep8style.check_files(['models/place.py'])
+        self.assertEqual(result.total_errors, 0,
+                         "Found code style errors (and warnings).")
+
+    def test_pep8_conformance_base_test(self):
+        pep8style = pep8.StyleGuide(quiet=True)
+        result = pep8style.check_files(
+            ['tests/test_models/test_place.py'])
         self.assertEqual(result.total_errors, 0,
                          "Found code style errors (and warnings).")
 
@@ -57,3 +65,7 @@ class TestBase(unittest.TestCase):
         self.assertTrue(Place_1.latitude, 34.05223)
         self.assertTrue(Place_1.longitude, -118.24368)
         self.assertTrue(Place_1.amenity_ids, "452342")
+
+    def test_4_file_Place_doc(self):
+        """ Check the documentation """
+        self.assertIsNotNone(Place.__doc__)

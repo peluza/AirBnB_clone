@@ -7,6 +7,7 @@ import os
 from models.amenity import Amenity
 from models.base_model import BaseModel
 
+
 class TestBase(unittest.TestCase):
     """TextMaxInteger(unittest.TesCase)
 
@@ -17,6 +18,12 @@ class TestBase(unittest.TestCase):
     def test_pep8_conformance_base(self):
         pep8style = pep8.StyleGuide(quiet=True)
         result = pep8style.check_files(['models/amenity.py'])
+        self.assertEqual(result.total_errors, 0,
+                         "Found code style errors (and warnings).")
+
+    def test_pep8_conformance_base_test(self):
+        pep8style = pep8.StyleGuide(quiet=True)
+        result = pep8style.check_files(['tests/test_models/test_amenity.py'])
         self.assertEqual(result.total_errors, 0,
                          "Found code style errors (and warnings).")
 
@@ -37,3 +44,7 @@ class TestBase(unittest.TestCase):
         Amenity_1.save()
         self.assertTrue(os.path.exists('file.json'))
         self.assertTrue(Amenity_1.name, "the greenzone")
+
+    def test_4_file_Amenity_doc(self):
+        """ Check the documentation """
+        self.assertIsNotNone(Amenity.__doc__)

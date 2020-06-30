@@ -21,6 +21,13 @@ class TestBase(unittest.TestCase):
         self.assertEqual(result.total_errors, 0,
                          "Found code style errors (and warnings).")
 
+    def test_pep8_conformance_base_test(self):
+        pep8style = pep8.StyleGuide(quiet=True)
+        result = pep8style.check_files(
+            ['tests/test_models/test_user.py'])
+        self.assertEqual(result.total_errors, 0,
+                         "Found code style errors (and warnings).")
+
     def test_1_class(self):
         """ creates instance of User"""
         class_User = User()
@@ -44,3 +51,7 @@ class TestBase(unittest.TestCase):
         self.assertTrue(user_1.password, "1234")
         self.assertTrue(user_1.first_name, "Edison")
         self.assertTrue(user_1.last_name, "Isaza")
+
+    def test_4_file_User_doc(self):
+        """ Check the documentation """
+        self.assertIsNotNone(User.__doc__)
