@@ -8,9 +8,23 @@ import models
 
 
 class BaseModel:
+    """
+        BaseModel main class
+        set the value of a new instance
+        or instance a class from a dictionary of an obj previous
+        created
+    """
 
     def __init__(self, *args, **kwargs):
+        """__init__ Constructor
+
+        *args
+        **kwargs: (Dictionary of the object)
+        """
         if kwargs is not None and kwargs != {}:
+            self.__dict__ = kwargs
+            if "__class__" in self.__dict__:
+                del self.__dict__["__class__"]
             self.id = kwargs['id']
             self.created_at = datetime.strptime(
                 kwargs['created_at'], '%Y-%m-%dT%H:%M:%S.%f')
@@ -23,16 +37,35 @@ class BaseModel:
             models.storage.new(self)
 
     def __str__(self):
+        """__str__ No official repre of an object
+
+        creates a string representation of the class name, the id and
+        its dictionary
+
+        Returns:
+            str: the representation NO OFICIAL of the object
+        """
         return str("[{}] ({}) {}".format(
             self.__class__.__name__, self.id, self.__dict__))
 
     def save(self):
-        print(self.updated_at)
+        """save Updates the datetime of the instance
+
+           storage with the class Filestorage calls save method
+           to storage in the Json.file
+
+        """
         self.updated_at = datetime.today()
-        print("entra a save")
         models.storage.save()
 
     def to_dict(self):
+        """to_dict dictionary of the object
+
+        Is a copy of the dictionary and repace in a isoformat the
+        update time and the created time.
+        Returns:
+            dict: new dictionary of the object
+        """
         dic = self.__dict__.copy()
         dic['updated_at'] = datetime.isoformat(self.updated_at)
         dic['created_at'] = datetime.isoformat(self.created_at)
