@@ -4,5 +4,9 @@ from models.base_model import BaseModel
 
 
 class Amenity(BaseModel):
-    """ class Amenity """
+    """Amenity
+
+    Args:
+         BaseModel (class):  the class is father
+    """
     name = ""
