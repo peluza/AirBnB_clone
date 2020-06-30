@@ -2,8 +2,6 @@
 """test_base_model
 """
 import unittest
-import time
-from datetime import datetime
 import pep8
 from models.base_model import BaseModel
 from models.__init__ import storage
@@ -18,19 +16,30 @@ class TestBase(unittest.TestCase):
 
     def test_pep8_conformance_base(self):
         pep8style = pep8.StyleGuide(quiet=True)
-        result = pep8style.check_files(['models/engine/file_storange.py'])
+        result = pep8style.check_files(['models/engine/file_storage.py'])
         self.assertEqual(result.total_errors, 0,
                          "Found code style errors (and warnings).")
 
-    def test_storage(self):
-        all_objs = storage.all()
-        for obj_id in all_objs.keys():
-            obj = all_objs[obj_id]
-            print(obj)
+    def test_pep8_conformance_base_test(self):
+        pep8style = pep8.StyleGuide(quiet=True)
+        result = pep8style.check_files(
+            ['tests/test_models/test_file_storage.py'])
+        self.assertEqual(result.total_errors, 0,
+                         "Found code style errors (and warnings).")
 
-        print("-- Create a new object --")
-        my_model = BaseModel()
-        my_model.name = "Holberton"
-        my_model.my_number = 89
-        my_model.save()
-        print(my_model)
+    def test_1_fiel_storage_exist(self):
+        """ Check if methods exists """
+        self.assertTrue(hasattr(storage, "__init__"))
+        self.assertTrue(hasattr(storage, "all"))
+        self.assertTrue(hasattr(storage, "new"))
+        self.assertTrue(hasattr(storage, "save"))
+        self.assertTrue(hasattr(storage, "reload"))
+
+    def test_2_file_storage_doc(self):
+        """ Check the documentation """
+        self.assertIsNotNone(storage.__doc__)
+        self.assertIsNotNone(storage.__init__.__doc__)
+        self.assertIsNotNone(storage.all.__doc__)
+        self.assertIsNotNone(storage.new.__doc__)
+        self.assertIsNotNone(storage.save.__doc__)
+        self.assertIsNotNone(storage.reload.__doc__)
