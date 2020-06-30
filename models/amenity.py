@@ -7,6 +7,6 @@ class Amenity(BaseModel):
     """Amenity
 
     Args:
-         BaseModel (class):  the class is father
+        BaseModel (class):  the class is father
     """
     name = ""
