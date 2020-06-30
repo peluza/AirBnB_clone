@@ -15,6 +15,7 @@ import re
 
 
 class HBNBCommand(cmd.Cmd):
+    """ comment"""
 
     prompt = "#---> "
     # prompt = "(hbnb) "
@@ -37,6 +38,7 @@ class HBNBCommand(cmd.Cmd):
     # def help_quit(self):
     #     print("Quit command to exit the program\n")
     def find_class(self, the_class):
+        """commit find"""
         list_class = ["BaseModel", "User", "City",
                       "Place", "Amenity", "Review", "State"]
         if the_class in list_class:
@@ -44,6 +46,7 @@ class HBNBCommand(cmd.Cmd):
         return False
 
     def do_create(self, the_class):
+        """create """
         if not the_class:
             print("** class name missing **")
             return
@@ -57,6 +60,11 @@ class HBNBCommand(cmd.Cmd):
             return
 
     def do_show(self, args):
+        """show
+
+        Args:
+            args ([type]): [description]
+        """
         if not args:
             print("** class name missing **")
             return
@@ -77,6 +85,11 @@ class HBNBCommand(cmd.Cmd):
         return
 
     def do_destroy(self, args):
+        """destory
+
+        Args:
+            args ([type]): [description]
+        """
         if not args:
             print("** class name missing **")
             return
@@ -98,6 +111,11 @@ class HBNBCommand(cmd.Cmd):
         return
 
     def do_update(self, args):
+        """update
+
+        Args:
+            args ([type]): [description]
+        """
         if not args:
             print("** class name missing **")
             return
@@ -130,6 +148,11 @@ class HBNBCommand(cmd.Cmd):
         return
 
     def do_all(self, the_class):
+        """all
+
+        Args:
+            the_class ([type]): [description]
+        """
         if the_class is "":
             lista = []
             all_objs = storage.all()
@@ -150,6 +173,14 @@ class HBNBCommand(cmd.Cmd):
         return
 
     def count_class(self, the_class):
+        """count_class
+
+        Args:
+            the_class ([type]): [description]
+
+        Returns:
+            [type]: [description]
+        """
         count = 0
         all_objs = storage.all()
         for key, value in all_objs.items():
@@ -158,6 +189,14 @@ class HBNBCommand(cmd.Cmd):
         return count
 
     def default(self, args):
+        """default
+
+        Args:
+            args ([type]): [description]
+
+        Returns:
+            [type]: [description]
+        """
         do_braces_split = False
         list_args = args.split(".")
         check_class = self.find_class(list_args[0])
@@ -188,7 +227,7 @@ class HBNBCommand(cmd.Cmd):
                 if "{" in list_args[1] and "}" in list_args[1]:
                     print("True have Braces")
                     do_braces_split = True
-                if do_braces_split == False:
+                if do_braces_split is False:
                     classN_id_args = classN_id + " " + \
                         func_args[2] + " " + "\"" + func_args[3] + "\""
                     print("updating...")
