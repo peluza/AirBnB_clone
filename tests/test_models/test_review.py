@@ -7,6 +7,7 @@ import os
 from models.review import Review
 from models.base_model import BaseModel
 
+
 class TestBase(unittest.TestCase):
     """TextMaxInteger(unittest.TesCase)
 
@@ -17,6 +18,13 @@ class TestBase(unittest.TestCase):
     def test_pep8_conformance_base(self):
         pep8style = pep8.StyleGuide(quiet=True)
         result = pep8style.check_files(['models/review.py'])
+        self.assertEqual(result.total_errors, 0,
+                         "Found code style errors (and warnings).")
+
+    def test_pep8_conformance_base_test(self):
+        pep8style = pep8.StyleGuide(quiet=True)
+        result = pep8style.check_files(
+            ['tests/test_models/test_review.py'])
         self.assertEqual(result.total_errors, 0,
                          "Found code style errors (and warnings).")
 
@@ -41,3 +49,7 @@ class TestBase(unittest.TestCase):
         self.assertTrue(Review_1.place_id, "403956")
         self.assertTrue(Review_1.user_id, "540982345")
         self.assertTrue(Review_1.text, "Erika Osorio")
+
+    def test_4_file_Review_doc(self):
+        """ Check the documentation """
+        self.assertIsNotNone(Review.__doc__)
