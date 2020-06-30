@@ -1,9 +1,17 @@
 #!/usr/bin/python3
+"""
+    module: place
+"""
 
 from models.base_model import BaseModel
 
 
 class Place(BaseModel):
+    """Place
+
+    Args:
+        BaseModel (class): Main class
+    """
     city_id = ""
     user_id = ""
     name = ""
