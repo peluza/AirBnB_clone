@@ -7,6 +7,7 @@ import os
 from models.city import City
 from models.base_model import BaseModel
 
+
 class TestBase(unittest.TestCase):
     """TextMaxInteger(unittest.TesCase)
 
@@ -17,6 +18,13 @@ class TestBase(unittest.TestCase):
     def test_pep8_conformance_base(self):
         pep8style = pep8.StyleGuide(quiet=True)
         result = pep8style.check_files(['models/city.py'])
+        self.assertEqual(result.total_errors, 0,
+                         "Found code style errors (and warnings).")
+
+    def test_pep8_conformance_base_test(self):
+        pep8style = pep8.StyleGuide(quiet=True)
+        result = pep8style.check_files(
+            ['tests/test_models/test_city.py'])
         self.assertEqual(result.total_errors, 0,
                          "Found code style errors (and warnings).")
 
@@ -39,3 +47,7 @@ class TestBase(unittest.TestCase):
         self.assertTrue(os.path.exists('file.json'))
         self.assertTrue(City_1.state_id, "CA")
         self.assertTrue(City_1.name, "Los Angeles")
+
+    def test_4_file_City_doc(self):
+        """ Check the documentation """
+        self.assertIsNotNone(City.__doc__)
