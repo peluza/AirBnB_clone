@@ -3,8 +3,9 @@
 """
 import unittest
 import time
-from datetime import datetime
 import pep8
+import os
+from datetime import datetime
 from models.base_model import BaseModel
 
 
@@ -21,31 +22,33 @@ class TestBase(unittest.TestCase):
         self.assertEqual(result.total_errors, 0,
                          "Found code style errors (and warnings).")
 
-    def test_1_date_time(self):
+    def test_1_class(self):
+        """ creates instance of BaseModel"""
+        class_BaseModel = BaseModel()
+        self.assertEqual(class_BaseModel.__class__.__name__, "BaseModel")
+
+    def test_2_date_time(self):
+        """ check if the BaseModel create the datetime"""
         test_1 = BaseModel()
         test_date_1 = test_1.created_at
         test_2 = datetime.today()
         self.assertEqual(test_2.replace(microsecond=0),
                           test_date_1.replace(microsecond=0))
 
-    def test_2_date_id(self):
+    def test_3_date_id(self):
+        """ check if the BaseModel save the id diferent of the user"""
         test_1 = BaseModel()
         test_date_1 = test_1.id
         test_2 = BaseModel()
         test_date_2 = test_2.id
         self.assertFalse(test_date_1 == test_date_2)
 
-    def test_3_date_save(self):
+    def test_4_date_save(self):
+        """ check if the BaseModel update the datetime"""
         test_1 = BaseModel()
         test_date_1 = test_1.updated_at
         time.sleep(1)
         test_1.save()
         test_date_2 = test_1.updated_at
+        self.assertTrue(os.path.exists('file.json'))
         self.assertNotEqual(test_date_1, test_date_2)
-
-    def test_4_dict(self):
-        test_1 = BaseModel()
-        dic = test_1.to_dict()
-        self.assertEqual(
-            dic,
-            {'created_at': test_1.created_at, 'updated_at': test_1.updated_at, 'id': test_1.id, '__class__': test_1.__class__.__name__})
