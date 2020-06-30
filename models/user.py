@@ -4,6 +4,11 @@ from models.base_model import BaseModel
 
 
 class User(BaseModel):
+    """User
+
+    Args:
+        BaseModel (class):  the class is father
+    """
     email = ""
     password = ""
     first_name = ""
