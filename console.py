@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-""" console"""
+""" Module: console"""
 
 import cmd
 from models import *
@@ -15,10 +15,17 @@ import re
 
 
 class HBNBCommand(cmd.Cmd):
+    """HBNBCommand
+
+    [Holberton BNB Console]
+        cmd (method): [command]
+
+    """
 
     prompt = "(hbnb) "
 
     def emptyline(self):
+        """empty line when hitting ENTER"""
         pass
 
     def do_prompt(self, line):
