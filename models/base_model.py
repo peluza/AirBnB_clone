@@ -64,4 +64,7 @@ class BaseModel():
         dic['updated_at'] = datetime.isoformat(self.updated_at)
         dic['created_at'] = datetime.isoformat(self.created_at)
         dic['__class__'] = self.__class__.__name__
+        if dic is None:
+            dic = {}
+            return dic
         return dic
