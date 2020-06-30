@@ -138,6 +138,10 @@ saves the object (to the JSON file) and prints the id
         return
 
     def do_all(self, the_class):
+        """Prints all string representation of all instances
+[Usage: *<>
+        *<class name>]"""
+
         if the_class is "":
             lista = []
             all_objs = storage.all()
@@ -158,6 +162,7 @@ saves the object (to the JSON file) and prints the id
         return
 
     def count_class(self, the_class):
+        """Count the amount of objects of the specific class"""
         count = 0
         all_objs = storage.all()
         for key, value in all_objs.items():
@@ -166,6 +171,12 @@ saves the object (to the JSON file) and prints the id
         return count
 
     def default(self, args):
+        """Use for reaching ohther function with different usage
+[Usage: *<class name>.all()
+        *<class name>.count()
+        *<class name>.show(<"id">)
+        *<class name>.update(<"id">, <attribute name>, <attribute value>)
+        *<class name>.update(<"id">, {<'attr_name':>, <"attr_value">})]"""
         do_braces_split = False
         list_args = args.split(".")
         check_class = self.find_class(list_args[0])
@@ -183,44 +194,52 @@ saves the object (to the JSON file) and prints the id
             classN_id = list_args[0] + " " + func_args[1]
             if func_args[0] == "show":
                 return self.do_show(classN_id)
+
             elif func_args[0] == "destroy":
                 return self.do_destroy(classN_id)
 
             if func_args[0] == "update":
                 if "{" in list_args[1] and "}" in list_args[1]:
                     do_braces_split = True
-                if do_braces_split == False:
-                    classN_id_args = classN_id + " " + \
-                        "\"" + func_args[2] + "\"" + " " + \
-                        "\"" + func_args[3] + "\""
-                    print("updatted")
-                    return self.do_update(classN_id_args)
+                if do_braces_split is False:
+                    if "{" not in list_args[1] and "}" not in list_args[1]:
+                        classN_id_args = classN_id + " " + \
+                            "\"" + func_args[2] + "\"" + " " + \
+                            "\"" + func_args[3] + "\""
+                        print(classN_id_args)
+                        return self.do_update(classN_id_args)
 
                 elif do_braces_split:
-                    func = list_args[1].split("(")[0]
-                    id_args = re.compile(
-                        "\(([^)]*)\)").split(list_args[1])[1]
-                    dic_args = re.compile("\{([^}]*)\}").split(id_args)[1]
-                    dic_ = "{" + dic_args + "}"
                     try:
-                        s = eval(dic_)
-                        if (type(s) is dict):
-                            dic_ = dic_args.replace(":", "").replace(",", "")
-                            dic_args = shlex.split(dic_)
-                            print(dic_args)
-                            quo = "\""
-                            es = " "
-                            j = 0
-                            for i in range(int(len(dic_args) / 2)):
-                                inp = classN_id + " " + quo + \
-                                    dic_args[j] + quo + " " + \
-                                    quo + dic_args[j+1] + quo
-                                j = j + 2
-                                self.do_update(inp)
-                                print("updated")
+                        func = list_args[1].split("(")[0]
+                        id_args = re.compile(
+                            "\(([^)]*)\)").split(list_args[1])[1]
+                        dic_args = re.compile("\{([^}]*)\}").split(id_args)[1]
+                        dic_ = "{" + dic_args + "}"
+                        try:
+                            s = eval(dic_)
+                            if (type(s) is dict):
+                                dic_ = dic_args.replace(
+                                    ":", "").replace(",", "")
+                                dic_args = shlex.split(dic_)
+                                quo = "\""
+                                es = " "
+                                j = 0
+                                for i in range(int(len(dic_args) / 2)):
+                                    inp = classN_id + " " + quo + \
+                                        dic_args[j] + quo + " " + \
+                                        quo + dic_args[j+1] + quo
+                                    j = j + 2
+                                    print(inp)
+                                    self.do_update(inp)
                                 return
+                        except:
+                            Exception("*** Unknown syntax: {}".format(args))
+                            return
                     except:
-                        pass
+                        Exception("*** Unknown syntax: {}".format(args))
+                        return
+
             print("*** Unknown syntax: {}".format(args))
             return
 
