@@ -23,7 +23,7 @@ class TestBase(unittest.TestCase):
     def test_pep8_conformance_base_test(self):
         pep8style = pep8.StyleGuide(quiet=True)
         result = pep8style.check_files(
-            ['tests/test_models/test_file_storage.py'])
+            ['tests/test_models/test_engine/test_file_storage.py'])
         self.assertEqual(result.total_errors, 0,
                          "Found code style errors (and warnings).")
 
