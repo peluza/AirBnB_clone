@@ -49,5 +49,5 @@ class FileStorage:
             for k, v in my_obj.items():
                 # class_name = k.split('.')[0]
                 # self.__objects[k] = globals()[class_name](**v)
-                self.__objects[k] = globals()[k.split('.')[0]](**v)
-                # self.__objects[k] = BaseModel(**v)
+                # self.__objects[k] = globals()[k.split('.')[0]](**v)
+                self.__objects[k] = BaseModel(**v)
