@@ -16,8 +16,7 @@ import re
 
 class HBNBCommand(cmd.Cmd):
 
-    prompt = "#---> "
-    # prompt = "(hbnb) "
+    prompt = "(hbnb) "
 
     def emptyline(self):
         pass
@@ -34,9 +33,8 @@ class HBNBCommand(cmd.Cmd):
         """ Exit the program """
         return True
 
-    # def help_quit(self):
-    #     print("Quit command to exit the program\n")
     def find_class(self, the_class):
+        """ Return True if the class is found in the list """
         list_class = ["BaseModel", "User", "City",
                       "Place", "Amenity", "Review", "State"]
         if the_class in list_class:
@@ -44,6 +42,13 @@ class HBNBCommand(cmd.Cmd):
         return False
 
     def do_create(self, the_class):
+        """do_create Creates a new instance of the specific class
+
+       saves the object (to the JSON file) and prints the id]
+
+        Args:
+            the_class (string): Represent the class name
+        """
         if not the_class:
             print("** class name missing **")
             return
@@ -162,7 +167,6 @@ class HBNBCommand(cmd.Cmd):
         list_args = args.split(".")
         check_class = self.find_class(list_args[0])
         if len(list_args) > 1 and check_class:
-            # fun = list_args[1].split("(")[0]
             if list_args[1] == "all()":
                 return self.do_all(list_args[0])
             elif list_args[1] == "count()":
@@ -171,71 +175,49 @@ class HBNBCommand(cmd.Cmd):
                 return
             function = list_args[1].replace(
                 "(", " ").replace(")", " ").replace(",", "")
-            print("func: ", function)
             func_args = shlex.split(function)
-            print("Antes del Update")
-            print(func_args)
             # concatenamos Class_name, espacio, id
             classN_id = list_args[0] + " " + func_args[1]
-
             if func_args[0] == "show":
                 return self.do_show(classN_id)
             elif func_args[0] == "destroy":
-                print("destroying ...")
                 return self.do_destroy(classN_id)
 
             if func_args[0] == "update":
                 if "{" in list_args[1] and "}" in list_args[1]:
-                    print("True have Braces")
                     do_braces_split = True
                 if do_braces_split == False:
                     classN_id_args = classN_id + " " + \
-                        func_args[2] + " " + "\"" + func_args[3] + "\""
-                    print("updating...")
+                        "\"" + func_args[2] + "\"" + " " + \
+                        "\"" + func_args[3] + "\""
+                    print("updatted")
                     return self.do_update(classN_id_args)
+
                 elif do_braces_split:
-                    update = list_args[1].replace(",", "").replace(":", "")
-
-                    return
-                    print("Here")
-                    print("-----")
-                    print(list_args[1])
-                    # f[0]  es Update
-                    # f[1] es lo que esta entre el parentesis
-                    update = list_args[1].replace(",", "").replace(":", "")
-                    f = re.compile("\(([^)]*)\)").split(update)
-                    print("f>>", f)
-                    print(f[1])
-                    s = "".join(f[1])
-                    print("s>>", s)
-                    f2 = re.compile("\{([^}]*)\}").split(s)
-                    print("f2>>", f2[0])
-                    # f2[0] = es el id
-                    s = "".join(f2[1])
-                    print("s>>", s)
-                    f3 = shlex.split(s)
-                    # f3 son los argumentos del dictionario
-                    print(len(f3))
-                    print("f3>>", f3)
-                    f4 = f2[0].replace("\"", "")
-                    # f4 = es el id sin comillas
-                    print(f4)
-                    lista = list_args[0] + " " + f4 + " "
-                    j = 0
-                    inp = ""
-                    quot = "\""
-                    for i in range(int(len(f3) / 2)):
-                        # f3 [j] = Name
-                        # f3[j+1] = value
-                        inp = lista + quot + f3[j] + \
-                            quot + " " + quot + f3[j+1] + quot
-                        print(inp)
-                        print("i", i)
-                        self.do_update(inp)
-
-                        print("Updating...")
-                        j = j + 2
-                    return
+                    func = list_args[1].split("(")[0]
+                    id_args = re.compile(
+                        "\(([^)]*)\)").split(list_args[1])[1]
+                    dic_args = re.compile("\{([^}]*)\}").split(id_args)[1]
+                    dic_ = "{" + dic_args + "}"
+                    try:
+                        s = eval(dic_)
+                        if (type(s) is dict):
+                            dic_ = dic_args.replace(":", "").replace(",", "")
+                            dic_args = shlex.split(dic_)
+                            print(dic_args)
+                            quo = "\""
+                            es = " "
+                            j = 0
+                            for i in range(int(len(dic_args) / 2)):
+                                inp = classN_id + " " + quo + \
+                                    dic_args[j] + quo + " " + \
+                                    quo + dic_args[j+1] + quo
+                                j = j + 2
+                                self.do_update(inp)
+                                print("updated")
+                                return
+                    except:
+                        pass
             print("*** Unknown syntax: {}".format(args))
             return
 
