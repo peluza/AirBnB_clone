@@ -44,10 +44,10 @@ class HBNBCommand(cmd.Cmd):
     def do_create(self, the_class):
         """do_create Creates a new instance of the specific class
 
-       saves the object (to the JSON file) and prints the id]
+       [saves the object (to the JSON file) and prints the id]
 
         Args:
-            the_class (string): Represent the class name
+            the_class (str): Represent the class name
         """
         if not the_class:
             print("** class name missing **")
@@ -62,6 +62,15 @@ class HBNBCommand(cmd.Cmd):
             return
 
     def do_show(self, args):
+        """do_show Print the string representation of the obj
+
+        [Prints the string representation
+        of an instance based on the class name and id]
+
+
+        Args:
+            args (str): [<class name> <id>]
+        """
         if not args:
             print("** class name missing **")
             return
@@ -82,6 +91,13 @@ class HBNBCommand(cmd.Cmd):
         return
 
     def do_destroy(self, args):
+        """do_destroy Deletes an instance
+
+        [Deletes it based on the class name and id
+
+        Args:
+            args (str): [<class name> <id>]
+        """
         if not args:
             print("** class name missing **")
             return
