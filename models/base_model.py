@@ -7,7 +7,7 @@ from datetime import datetime
 import models
 
 
-class BaseModel:
+class BaseModel():
     """
         BaseModel main class
         set the value of a new instance
@@ -16,12 +16,11 @@ class BaseModel:
     """
 
     def __init__(self, *args, **kwargs):
-        """__init__ Constructor
-
-        *args
-        **kwargs: (Dictionary of the object)
+        """ __init__ Constructor
+            *args
+            **kwargs: (Dictionary of the object)
         """
-        if kwargs is not None and kwargs != {}:
+        if kwargs and kwargs != {}:
             self.__dict__ = kwargs
             if "__class__" in self.__dict__:
                 del self.__dict__["__class__"]
@@ -32,39 +31,34 @@ class BaseModel:
                 kwargs['updated_at'], '%Y-%m-%dT%H:%M:%S.%f')
         else:
             self.id = str(uuid.uuid4())
-            self.created_at = datetime.now()
-            self.updated_at = datetime.now()
+            self.created_at = datetime.utcnow()
+            self.updated_at = datetime.utcnow()
             models.storage.new(self)
 
     def __str__(self):
-        """__str__ No official repre of an object
-
-        creates a string representation of the class name, the id and
-        its dictionary
-
-        Returns:
+        """ __str__ No official repre of an object
+            creates a string representation of the class name, the id and
+            its dictionary
+            Returns:
             str: the representation NO OFICIAL of the object
         """
         return str("[{}] ({}) {}".format(
             self.__class__.__name__, self.id, self.__dict__))
 
     def save(self):
-        """save Updates the datetime of the instance
-
-           storage with the class Filestorage calls save method
-           to storage in the Json.file
+        """ save Updates the datetime of the instance
+            storage with the class Filestorage calls save method
+            to storage in the Json.file
 
         """
-        self.updated_at = datetime.now()
+        self.updated_at = datetime.utcnow()
         models.storage.save()
 
     def to_dict(self):
-        """to_dict dictionary of the object
-
-        Is a copy of the dictionary and repace in a isoformat the
-        update time and the created time.
-        Returns:
-            dict: new dictionary of the object
+        """ to_dict dictionary of the object
+            Is a copy of the dictionary and repace in a isoformat the
+            update time and the created time.
+            Returns: dict: new dictionary of the object
         """
         dic = self.__dict__.copy()
         dic['updated_at'] = datetime.isoformat(self.updated_at)
