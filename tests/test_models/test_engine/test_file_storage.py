@@ -3,6 +3,8 @@
 
 import unittest
 import pep8
+import os
+import json
 from models.base_model import BaseModel
 from models.__init__ import storage
 from models.engine.file_storage import FileStorage
@@ -19,6 +21,13 @@ class TestBase(unittest.TestCase):
         """ test the pep8 style for module file_storage"""
         pep8style = pep8.StyleGuide(quiet=True)
         result = pep8style.check_files(['models/engine/file_storage.py'])
+        self.assertEqual(result.total_errors, 0,
+                         "Found code style errors (and warnings).")
+
+    def test_pep8_conformance_base_test(self):
+        pep8style = pep8.StyleGuide(quiet=True)
+        result = pep8style.check_files(
+            ['tests/test_models/test_engine/test_file_storage.py'])
         self.assertEqual(result.total_errors, 0,
                          "Found code style errors (and warnings).")
 
@@ -50,17 +59,21 @@ class TestBase(unittest.TestCase):
         """ test no arguments for the class"""
         with self.assertRaises(TypeError) as error:
             instance = FileStorage.__init__()
-        messg = "object() takes no parameters"
+        messg = "descriptor '__init__' of 'object' object needs an argument"
+        print(error.exception)
         self.assertEqual(str(error.exception), messg)
 
     def test_5_attributes(self):
         """ tests class attributes"""
+        print(FileStorage.__dict__)
         self.assertTrue(hasattr(FileStorage, "_FileStorage__file_path"))
         self.assertTrue(hasattr(FileStorage, "_FileStorage__objects"))
+        self.assertIsInstance(storage._FileStorage__path, str)
         self.assertIsInstance(storage._FileStorage__objects, dict)
-        self.assertIsInstance(storage._FileStorage__file_path, str)
 
-    def test_6_store_object(self):
+    def test_5_store_object(self):
+        """tests objetct
+        """
         test_1 = BaseModel()
         test_1.name = "Holberton"
         test_1.my_number = 89
@@ -69,4 +82,38 @@ class TestBase(unittest.TestCase):
         dic_obj = storage.all()
         self.assertTrue(dict, dic_obj)
         self.assertTrue(dic_obj != {})
-        self.assertIs(dic_obj, _FileStorage__object)
+
+    def test_6_save(self):
+        """
+        Testing the save method
+        """
+        test_1 = BaseModel()
+        test_1.save()
+        self.assertTrue(os.path.exists("file.json"))
+
+    def test_7_reload(self):
+        """
+        Test the reload file format dict
+        """
+        test_1 = BaseModel()
+        test_1.save()
+        test_1.name = "Erika"
+        test_1.number = 1
+        test_1.save()
+        self.assertTrue(os.path.exists("file.json"))
+        dic = {}
+        with open('file.json', 'r') as fjson:
+            dic = json.loads(fjson.read())
+        test_1_key = test_1.__class__.__name__ + '.' + test_1.id
+        self.assertDictEqual(test_1.to_dict(), dic[test_1_key])
+
+    def test_8_new(self):
+        """ Test the new in the object
+        """
+        test_1 = BaseModel()
+        test_1.name = "Edison"
+        test_2 = BaseModel()
+        test_2.name = "Edison"
+        id_tests_1 = test_1.id
+        id_tests_2 = test_2.id
+        self.assertFalse(id_tests_1 == id_tests_2)
