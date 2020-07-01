@@ -74,3 +74,9 @@ All your tests should be executed by using this command:
 [16. Update from dictionary](./https://github.com/peluza/AirBnB_clone/blob/master/console.py)
 
 [17. Unittests for the Console!](./https://github.com/peluza/AirBnB_clone/blob/master/tests/test_console.py)
+
+AUTHORS
+
+* Erika Osorio [erikaosgue](./https://github.com/erikaosgue)
+
+* Edison Isaza [peluza](./https://github.com/peluza)
