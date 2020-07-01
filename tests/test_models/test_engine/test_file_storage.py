@@ -1,18 +1,17 @@
 #!/usr/bin/python3
-"""test_base_model"""
-
+"""test_base_model
+"""
 import unittest
 import pep8
 import os
 import json
 from models.base_model import BaseModel
 from models.__init__ import storage
-from models.engine.file_storage import FileStorage
+from models import FileStorage
 
 
 class TestBase(unittest.TestCase):
     """TextMaxInteger(unittest.TesCase)
-
     Args:
         unittest (Test): analysis of data
     """
@@ -55,21 +54,12 @@ class TestBase(unittest.TestCase):
         messg = "object() takes no parameters"
         self.assertEqual(str(error.exception), messg)
 
-    def test_4_no_arguments(self):
-        """ test no arguments for the class"""
-        with self.assertRaises(TypeError) as error:
-            instance = FileStorage.__init__()
-        messg = "descriptor '__init__' of 'object' object needs an argument"
-        print(error.exception)
-        self.assertEqual(str(error.exception), messg)
-
-    def test_5_attributes(self):
+    def test_4_attributes(self):
         """ tests class attributes"""
-        print(FileStorage.__dict__)
         self.assertTrue(hasattr(FileStorage, "_FileStorage__file_path"))
         self.assertTrue(hasattr(FileStorage, "_FileStorage__objects"))
-        self.assertIsInstance(storage._FileStorage__path, str)
         self.assertIsInstance(storage._FileStorage__objects, dict)
+        self.assertIsInstance(storage._FileStorage__file_path, str)
 
     def test_5_store_object(self):
         """tests objetct
@@ -81,7 +71,6 @@ class TestBase(unittest.TestCase):
         storage.reload()
         dic_obj = storage.all()
         self.assertTrue(dict, dic_obj)
-        self.assertTrue(dic_obj != {})
 
     def test_6_save(self):
         """
