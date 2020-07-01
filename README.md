@@ -1,6 +1,6 @@
 # AirBnB_clone
 
-<img src="holbertonintranet.s3.amazonaws.com/uploads/medias/2018/6/65f4a1dd9c51265f49d0.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIARDDGGGOUWMNL5ANN%2F20200630%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20200630T144316Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=a3cb9c7b11a292e1d73b83c9a89fe2c6c5630a1c8a5d72073d30bc9a73581122">
+<img src="https://holbertonintranet.s3.amazonaws.com/uploads/medias/2018/6/65f4a1dd9c51265f49d0.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIARDDGGGOUWMNL5ANN%2F20200630%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20200630T144316Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=a3cb9c7b11a292e1d73b83c9a89fe2c6c5630a1c8a5d72073d30bc9a73581122"/>
 
 ## What’s a command interpreter?
 Do you remember the Shell? It’s exactly the same but limited to a specific use-case. In our case, we want to be able to manage the objects of our project:
@@ -74,3 +74,9 @@ All your tests should be executed by using this command:
 [16. Update from dictionary](./https://github.com/peluza/AirBnB_clone/blob/master/console.py)
 
 [17. Unittests for the Console!](./https://github.com/peluza/AirBnB_clone/blob/master/tests/test_console.py)
+
+AUTHORS
+
+* Erika Osorio [erikaosgue](./https://github.com/erikaosgue)
+
+* Edison Isaza [peluza](./https://github.com/peluza)
