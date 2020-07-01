@@ -1,6 +1,6 @@
 # AirBnB_clone
 
-![HBNB](/HBNB_image.png)
+![HBNB](HBNB_image.png)
 
 ## What’s a command interpreter?
 Do you remember the Shell? It’s exactly the same but limited to a specific use-case. In our case, we want to be able to manage the objects of our project:
@@ -165,7 +165,7 @@ This repository contains the following files:
 [7. Console 0.1](https://github.com/peluza/AirBnB_clone/blob/master/console.py)
 * Update your command interpreter (console.py) to have these commands:
 
-| Command title | Description                                                                                                                      |
+| Command       | Description                                                                                                                      |
 | ------------- | ---------------------------------------------------------------------------------------------------------------------------------|
 | create        | Creates a new instance of BaseModel, saves it (to the JSON file) and prints the id. Ex: $ create BaseModel                       |
 | show          | Prints the string representation of an instance based on the class name and id. Ex: $ show BaseModel 1234-1234-1234.             |
@@ -185,7 +185,7 @@ This repository contains the following files:
 | Class        | File path               |
 | -------------| ------------------------|
 | State        | models/state.py         |
-| City         | models/city.py)         |
+| City         | models/city.py          |
 | Amenity      | models/amenity.py       |
 | Place        | models/place.py         |
 | Review       | models/review.py        |
