@@ -3,6 +3,8 @@
 """
 import unittest
 import pep8
+import os
+import json
 from models.base_model import BaseModel
 from models.__init__ import storage
 from models import FileStorage
@@ -19,6 +21,13 @@ class TestBase(unittest.TestCase):
         """ test the pep8 style for module file_storage"""
         pep8style = pep8.StyleGuide(quiet=True)
         result = pep8style.check_files(['models/engine/file_storage.py'])
+        self.assertEqual(result.total_errors, 0,
+                         "Found code style errors (and warnings).")
+
+    def test_pep8_conformance_base_test(self):
+        pep8style = pep8.StyleGuide(quiet=True)
+        result = pep8style.check_files(
+            ['tests/test_models/test_engine/test_file_storage.py'])
         self.assertEqual(result.total_errors, 0,
                          "Found code style errors (and warnings).")
 
@@ -54,6 +63,8 @@ class TestBase(unittest.TestCase):
         self.assertIsInstance(storage._FileStorage__file_path, str)
 
     def test_5_store_object(self):
+        """tests objetct
+        """
         test_1 = BaseModel()
         test_1.name = "Holberton"
         test_1.my_number = 89
@@ -61,3 +72,38 @@ class TestBase(unittest.TestCase):
         storage.reload()
         dic_obj = storage.all()
         self.assertTrue(dict, dic_obj)
+
+    def test_6_save(self):
+        """
+        Testing the save method
+        """
+        test_1 = BaseModel()
+        test_1.save()
+        self.assertTrue(os.path.exists("file.json"))
+
+    def test_7_reload(self):
+        """
+        Test the reload file format dict
+        """
+        test_1 = BaseModel()
+        test_1.save()
+        test_1.name = "Erika"
+        test_1.number = 1
+        test_1.save()
+        self.assertTrue(os.path.exists("file.json"))
+        dic = {}
+        with open('file.json', 'r') as fjson:
+            dic = json.loads(fjson.read())
+        test_1_key = test_1.__class__.__name__ + '.' + test_1.id
+        self.assertDictEqual(test_1.to_dict(), dic[test_1_key])
+
+    def test_8_new(self):
+        """ Test the new in the object
+        """
+        test_1 = BaseModel()
+        test_1.name = "Edison"
+        test_2 = BaseModel()
+        test_2.name = "Edison"
+        id_tests_1 = test_1.id
+        id_tests_2 = test_2.id
+        self.assertFalse(id_tests_1 == id_tests_2)
