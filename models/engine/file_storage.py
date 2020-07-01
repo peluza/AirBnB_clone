@@ -6,6 +6,18 @@ import json
 import os
 from ..base_model import BaseModel
 from models.user import User
+from models.place import Place
+from models.city import City
+from models.amenity import Amenity
+from models.review import Review
+from models.state import State
+
+dic_of_class = {
+    "BaseModel": BaseModel, "City": City,
+    "Place": Place, "State": State,
+    "User": User, "Review": Review,
+    "Amenity": Amenity
+}
 
 
 class FileStorage:
@@ -42,12 +54,17 @@ class FileStorage:
     def reload(self):
         """reload elements in the file.json
         """
+        classes = {}
+
         if os.path.exists(self.__file_path):
             with open(self.__file_path, 'r', encoding='utf-8') as my_file:
                 str_read = my_file.read()
             my_obj = json.loads(str_read)
             for k, v in my_obj.items():
-                # class_name = k.split('.')[0]
+                which_cls = k.split('.')[0]
+                the_class = dic_of_class[which_cls]
+                self.__objects[k] = the_class(**v)
+                # eval(class_name(**v))
                 # self.__objects[k] = globals()[class_name](**v)
                 # self.__objects[k] = globals()[k.split('.')[0]](**v)
-                self.__objects[k] = BaseModel(**v)
+                # self.__objects[k] = BaseModel(**v)
