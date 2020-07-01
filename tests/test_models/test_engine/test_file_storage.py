@@ -1,11 +1,11 @@
 #!/usr/bin/python3
-"""test_base_model
-"""
+"""test_base_model"""
+
 import unittest
 import pep8
 from models.base_model import BaseModel
 from models.__init__ import storage
-from models import FileStorage
+from models.engine.file_storage import FileStorage
 
 
 class TestBase(unittest.TestCase):
@@ -46,14 +46,21 @@ class TestBase(unittest.TestCase):
         messg = "object() takes no parameters"
         self.assertEqual(str(error.exception), messg)
 
-    def test_4_attributes(self):
+    def test_4_no_arguments(self):
+        """ test no arguments for the class"""
+        with self.assertRaises(TypeError) as error:
+            instance = FileStorage.__init__()
+        messg = "object() takes no parameters"
+        self.assertEqual(str(error.exception), messg)
+
+    def test_5_attributes(self):
         """ tests class attributes"""
         self.assertTrue(hasattr(FileStorage, "_FileStorage__file_path"))
         self.assertTrue(hasattr(FileStorage, "_FileStorage__objects"))
         self.assertIsInstance(storage._FileStorage__objects, dict)
         self.assertIsInstance(storage._FileStorage__file_path, str)
 
-    def test_5_store_object(self):
+    def test_6_store_object(self):
         test_1 = BaseModel()
         test_1.name = "Holberton"
         test_1.my_number = 89
@@ -61,3 +68,5 @@ class TestBase(unittest.TestCase):
         storage.reload()
         dic_obj = storage.all()
         self.assertTrue(dict, dic_obj)
+        self.assertTrue(dic_obj != {})
+        self.assertIs(dic_obj, _FileStorage__object)
