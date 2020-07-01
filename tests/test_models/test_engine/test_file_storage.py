@@ -12,7 +12,6 @@ from models import FileStorage
 
 class TestBase(unittest.TestCase):
     """TextMaxInteger(unittest.TesCase)
-
     Args:
         unittest (Test): analysis of data
     """
