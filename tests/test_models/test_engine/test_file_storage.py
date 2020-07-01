@@ -117,3 +117,10 @@ class TestBase(unittest.TestCase):
         id_tests_1 = test_1.id
         id_tests_2 = test_2.id
         self.assertFalse(id_tests_1 == id_tests_2)
+
+    def test_9_all(self):
+        """ Test the all in the object
+        """
+        all_storage = storage.all()
+        all_filestorage = FileStorage._FileStorage__objects
+        self.assertDictEqual(all_storage, all_filestorage)
