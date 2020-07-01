@@ -75,11 +75,15 @@ class TestBase(unittest.TestCase):
         self.assertTrue(os.path.exists('file.json'))
         self.assertNotEqual(test_date_1, test_date_2)
 
-    def test_empty_dict(self):
-        """ tests that a new instance is created from an empty dictionary """
-        my_instance = BaseModel({})
-        self.assertIsInstance(my_instance, BaseModel)
+    def setUp(self):
+        """ sets up the initial conditions for the test"""
+        self.b1 = BaseModel()
+        self.b2 = BaseModel()
+        self.basedict = BaseModel()
+        self.bsave = BaseModel()
+        self.bmain = BaseModel()
 
+    # Atributos
     # def test_uuid(self):
     #     """ tests that every id is unique """
     #     self.assertIsInstance(self.b1, BaseModel)
@@ -97,19 +101,20 @@ class TestBase(unittest.TestCase):
     #     self.assertIsInstance(self.b2.updated_at, datetime)
     #     self.assertNotEqual(self.b2.created_at, self.b2.updated_at)
 
-    # def test_todict(self):
-    #     """ tests that values in dictionary are strings  """
-    #     self.assertTrue(type(self.basedict.to_dict()) is dict)
-    #     dictionary = self.basedict.to_dict()
-    #     self.assertIsInstance(dictionary['created_at'], str)
-    #     self.assertIsInstance(dictionary['updated_at'], str)
-    #     self.assertIsInstance(dictionary['__class__'], str)
-    #     self.assertIsInstance(dictionary['id'], str)
+    # Métodos
+    def test_todict(self):
+        """ tests that values in dictionary are strings  """
+        self.assertTrue(type(self.basedict.to_dict()) is dict)
+        dictionary = self.basedict.to_dict()
+        self.assertIsInstance(dictionary['created_at'], str)
+        self.assertIsInstance(dictionary['updated_at'], str)
+        self.assertIsInstance(dictionary['__class__'], str)
+        self.assertIsInstance(dictionary['id'], str)
 
     # def test_save(self):
     #     """ tests that updated_at is updated  """
     #     olddate = self.bsave.updated_at
-    #     self.bsave.save()
+    #     self.bsave.save()  # update
     #     self.assertNotEqual(olddate, self.bsave.updated_at)
     #     self.assertIsInstance(self.bsave.updated_at, datetime)
 
@@ -140,9 +145,7 @@ class TestBase(unittest.TestCase):
     #     self.assertEqual(b1_copy_test.created_at, self.b1.created_at)
     #     self.assertEqual(b1_copy_test.updated_at, self.b1.updated_at)
 
-    # def test_docstring_BaseModel(self):
-    #     """ tests that docstrings are present """
-    #     self.assertIsNotNone(BaseModel.__init__.__doc__)
-    #     self.assertIsNotNone(BaseModel.to_dict.__doc__)
-    #     self.assertIsNotNone(BaseModel.save.__doc__)
-    #     self.assertIsNotNone(BaseModel.__str__.__doc__)
+    # def test_empty_dict(self):
+    #     """ tests that a new instance is created from an empty dictionary """
+    #     my_instance = BaseModel({})
+    #     self.assertIsInstance(my_instance, BaseModel)
