@@ -60,12 +60,10 @@ class BaseModel():
             update time and the created time.
             Returns: dict: new dictionary of the object
         """
-        dic = {}
         dic = self.__dict__.copy()
         dic['updated_at'] = datetime.isoformat(self.updated_at)
         dic['created_at'] = datetime.isoformat(self.created_at)
         dic['__class__'] = self.__class__.__name__
         if dic is None:
             dic = {}
-            return dic
         return dic
