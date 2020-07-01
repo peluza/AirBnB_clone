@@ -54,8 +54,6 @@ class FileStorage:
     def reload(self):
         """reload elements in the file.json
         """
-        classes = {}
-
         if os.path.exists(self.__file_path):
             with open(self.__file_path, 'r', encoding='utf-8') as my_file:
                 str_read = my_file.read()
@@ -64,7 +62,7 @@ class FileStorage:
                 which_cls = k.split('.')[0]
                 the_class = dic_of_class[which_cls]
                 self.__objects[k] = the_class(**v)
-                # eval(class_name(**v))
-                # self.__objects[k] = globals()[class_name](**v)
+                # Using globals is dangerous because can reach modules and more
+                # And BaseModel works for the others class
                 # self.__objects[k] = globals()[k.split('.')[0]](**v)
                 # self.__objects[k] = BaseModel(**v)
