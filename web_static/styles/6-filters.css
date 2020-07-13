@@ -1,0 +1,103 @@
+.filters {
+        display: flex;
+        align-items: center;
+        height: 70px;
+        width: 100%;
+        border: 1px;
+        border-color: #dddddd;
+        border-radius: 4px;
+        position: relative;
+        border-style: solid;
+    }
+.butt {
+        position: absolute;
+        right: 30px;
+        font-size: 18px;
+        background-color: #FF5A5F;
+        color: #ffffff;
+        height: 48px;
+        width: 20%;
+        border: 0;
+        border-radius: 4px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+.butt:hover{
+        opacity: .9;
+    }
+.locations {
+        height: 100%;
+        width: 25%;
+        border-right: #dddddd 1px solid;
+        margin-left: 30px;
+}
+.amenities {
+        height: 100%;
+        width: 25%;
+        margin-left: 30px;
+}
+.locations h3 {
+        font-weight: 600;
+        margin-bottom: 0px;
+
+}
+.amenities h3 {
+        font-weight: 600;
+        margin-bottom: 0px;
+}
+.locations h4{
+        font-weight: 400;
+        font-size: 14px;
+        margin-top: 5px;
+}
+.amenities h4 {
+        font-weight: 400;
+        font-size: 14px;
+        margin-top: 5px;
+}
+
+.popover {
+        list-style: none;
+        background-color:  #FAFAFA;
+        border: #DDDDDD 1px solid;
+        border-radius: 4px;
+        margin-top: -5px;
+        padding-left: 20px;
+        padding-bottom: 50px;
+        display: none;
+        min-width: 260px;
+}
+.amenities:hover .popover{
+        display: block;
+      }
+      
+.locations:hover .popover{
+        display: block;
+      }
+
+.amenities .popover {
+        margin-left: -31px;
+        padding-top: 20px;
+
+}
+.locations .popover {
+        margin-left: -30px;
+        margin-right: -3px;
+
+}
+.popover ul {
+        padding-left: 10px;
+}
+.popover li {
+        list-style: none;
+        margin-left: 5px;
+        margin-top: 5px;
+}
+.popover h2 {
+        font-size: 16px;
+        margin-top: 20px;
+        margin-bottom: 0px;
+}
