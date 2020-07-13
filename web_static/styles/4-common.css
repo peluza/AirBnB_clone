@@ -1,0 +1,14 @@
+body {
+        margin: 0;
+        padding: 0;
+        color:  #484848;
+        font-size: 14px;
+        font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+        position: relative;
+        min-height: 94vh;
+        padding-bottom: 60px;
+}
+.container {
+        max-width: 1000px;
+        margin: 30px auto 30px auto;
+}
